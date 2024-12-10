@@ -40,6 +40,30 @@ fn deploy_campaign_contract() -> ContractAddress {
     contract_address
 }
 
+pub mod Accounts {
+    use starknet::ContractAddress;
+    use core::traits::TryInto;
+
+    pub fn owner() -> ContractAddress {
+        'owner'.try_into().unwrap()
+    }
+}
+
+#[test]
+fn test_upgradability() {
+    let nft_class_hash = declare("TokenGiverNFT").unwrap().contract_class();
+
+    let mut constructor_calldata: Array<felt252> = ArrayTrait::new();
+    nft_class_hash.serialize(ref constructor_calldata);
+
+    let contract = declare("TokengiverCampaign").unwrap().contract_class();
+    let (contract_address, _) = contract.deploy(@constructor_calldata).unwrap();
+
+    let token_giver_campaign_dispatcher = ICampaignDispatcher { contract_address };
+    let new_class_hash = declare("TokengiverCampaign").unwrap().contract_class().class_hash;
+    token_giver_campaign_dispatcher.upgrade(*new_class_hash);
+}
+
 // #[test]
 // #[fork("SEPOLIA_LATEST")]
 // fn test_create_campaign() {
