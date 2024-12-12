@@ -2,10 +2,9 @@ use core::num::traits::zero::Zero;
 use core::starknet::SyscallResultTrait;
 use core::traits::{TryInto, Into};
 use starknet::{ContractAddress, ClassHash, get_block_timestamp};
-// use snforge_std::{declare, ContractClassTrait, CheatTarget, start_prank, stop_prank,};
 use snforge_std::{
     declare, start_cheat_caller_address, stop_cheat_caller_address, ContractClassTrait,
-    DeclareResultTrait, spy_events, EventSpyAssertionsTrait,
+    DeclareResultTrait, EventSpyAssertionsTrait,
 };
 use openzeppelin::{token::erc721::interface::{ERC721ABIDispatcher, ERC721ABIDispatcherTrait}};
 
